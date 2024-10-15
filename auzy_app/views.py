@@ -2,8 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse
+from django.views.decorators.http import require_http_methods
 from django.contrib.auth.models import User
 from .models import User_Detail
+import json
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import logging
 
 # Create your views here.
 def homepage(request):
@@ -55,3 +61,61 @@ def user_signup(request):
 def user_logout(request):
     logout(request)
     return redirect('homepage')
+
+
+
+################################
+API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english"
+HEADERS = {"Authorization": "Bearer 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"}
+logger = logging.getLogger(__name__)
+def query(payload):
+    response = requests.post(API_URL, headers=HEADERS, json=payload)
+    return response.json()
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def detect_spam(request):
+    try:
+        data = json.loads(request.body)
+        url = data.get('url')
+        
+        if not url:
+            return JsonResponse({"error": "URL is required"}, status=400)
+        
+        # Query the model
+        output = query({
+            "inputs": url,
+        })
+        
+        logger.info(f"Model output for URL {url}: {output}")
+        
+        # Process the output
+        if output and isinstance(output, list) and len(output) > 0:
+            result = output[0]
+            if isinstance(result, list) and len(result) == 2:
+                negative_score = next((item['score'] for item in result if item['label'] == 'NEGATIVE'), None)
+                positive_score = next((item['score'] for item in result if item['label'] == 'POSITIVE'), None)
+                
+                if negative_score is not None and positive_score is not None:
+                    # Adjust spam detection logic
+                    is_spam = negative_score < positive_score 
+                    
+                    return JsonResponse({
+                        "url": url,
+                        "is_spam": is_spam,
+                        "negative_score": negative_score,
+                        "positive_score": positive_score,
+                        "model_output": output
+                    })
+                else:
+                    return JsonResponse({"error": "Missing expected scores"}, status=500)
+            else:
+                return JsonResponse({"error": "Unexpected result structure"}, status=500)
+        else:
+            return JsonResponse({"error": "Unexpected model output"}, status=500)
+    
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Exception as e:
+        logger.exception(f"Error processing URL {url}")
+        return JsonResponse({"error": str(e)}, status=500)
