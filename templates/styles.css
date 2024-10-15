@@ -67,7 +67,7 @@ button {
 }
 
 button:hover {
-    background-color: #f1f1f1; /* Light grey on hover */
+    background-color: #d7d7d7; /* Light grey on hover */
 }
 
 .forgot-password {
