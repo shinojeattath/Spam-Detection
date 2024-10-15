@@ -1,0 +1,48 @@
+{% load static from static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS App</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>SMS App</h2>
+        <div class="chat-box">
+            <ul id="messages">
+                <li class="message">Hello! How are you?</li>
+                <li class="message">I'm good, thanks! How about you?</li>
+            </ul>
+        </div>
+        <div class="input-group">
+            <input type="text" id="message" placeholder="Type a message..." />
+            <button id="send-button">Send</button>
+        </div>
+        <p class="forgot-password">Forgot password?</p>
+        <p>&copy; 2024 SMS App</p>
+    </div>
+
+    <script>
+        document.getElementById('send-button').addEventListener('click', function() {
+            const messageInput = document.getElementById('message');
+            const messageText = messageInput.value;
+
+            if (messageText.trim()) {
+                const messagesList = document.getElementById('messages');
+                
+                const newMessage = document.createElement('li');
+                newMessage.className = 'message';
+                newMessage.textContent = messageText;
+
+                messagesList.appendChild(newMessage);
+                messageInput.value = '';
+
+                // Auto-scroll to the bottom
+                messagesList.scrollTop = messagesList.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
