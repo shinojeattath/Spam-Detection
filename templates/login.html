@@ -1,10 +1,11 @@
+{% load static from static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
     <div class="container">
@@ -22,7 +23,7 @@
             <p class="forgot-password"><a href="forgot-password.html">Forgot Password?</a></p>
             <button type="submit">Login</button>
         </form>
-        <p>Not registered? <a href="signup.html">Sign up</a></p>
+        <p>Not registered? <a href="{% url 'signup' %}">Sign up</a></p>
     </div>
 
     <script>
