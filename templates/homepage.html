@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #09090B;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        /* Navigation Bar Styles */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #09090B;
+            border-radius: 10px;
+        }
+
+        .navbar .logo {
+            font-size: 2rem;
+            color: #4caf50;
+            font-weight: bolder;
+        }
+
+        .navbar .search-container {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+        .navbar input[type="text"] {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 20px;
+            width: 400px;
+            outline: none;
+            background-color: #09090B;
+            color: #ffffff;
+            border: 1px solid #555;
+        }
+
+        .navbar input[type="text"]::placeholder {
+            color: #aaaaaa;
+        }
+
+        .navbar .search-button {
+            padding: 0.5rem 1rem;
+            margin-left: 10px;
+            background-color: #4caf50;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar .search-button:hover {
+            background-color: #45a049;
+        }
+
+        .navbar .icon-container {
+            display: flex;
+            gap: 10px; /* Reduced gap for smaller buttons */
+        }
+
+        .navbar .icon-button {
+            padding: 0.5rem 0.8rem; /* Smaller padding for smaller buttons */
+            background-color: #ffffff;
+            border: none;
+            border-radius: 25px;
+            color: #121212;
+            font-size: 0.8rem; /* Smaller font size */
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .navbar .icon-button:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #09090B;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            font-size: 3.5rem;
+        }
+
+        p {
+            margin-top: 1.5rem;
+            color: #bbbbbb;
+            font-size: 0.9rem;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            color: #121212;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        a {
+            color: #4caf50;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Search Result Box Styles */
+        .search-result {
+            margin-top: 3rem;
+            padding: 2rem; /* Same padding as the container */
+            background-color: #09090B; /* Darker grey for contrast */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            width: 400px; /* Increased width */
+            border: 1px solid #555; /* Grey border */
+            text-align: center; /* Center text alignment */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header class="navbar">
+        <div class="logo">AUZY</div>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Enter domain...">
+            <button class="search-button" onclick="performSearch()">Search</button>
+        </div>
+        <div class="icon-container">
+            <button class="icon-button" onclick="window.open('user.html', '_blank')">User</button>
+            <button class="icon-button" onclick="window.open('chat.html', '_blank')">Chat</button>
+            <button class="icon-button" onclick="window.open('result.html', '_blank')">Result</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Welcome to the Spammer Web App</h2>
+        <p>The Spam Detection Web Application is a simple yet effective tool designed to automatically receive and analyze incoming messages for spam content. It aims to provide a quick and efficient solution for identifying unwanted messages, making it useful for personal and professional communication channels.</p>
+        
+        <!-- Search Result Box -->
+        <div class="search-result" id="searchResult" style="display: none;">
+            <!-- Search results will be displayed here -->
+        </div>
+    </main>
+
+    <script>
+        function performSearch() {
+            const searchInput = document.getElementById('searchInput').value;
+            const searchResultDiv = document.getElementById('searchResult');
+
+            // Example spam detection logic (replace with actual logic)
+            const spamDomains = ['spam.com', 'fake.com', 'test.com']; // Add spam domains here
+            const isSpam = spamDomains.includes(searchInput.trim());
+
+            if (searchInput.trim() !== '') {
+                searchResultDiv.innerHTML = `<h3>Result for "${searchInput}":</h3><p>${isSpam ? 'This domain is a spam!' : 'This domain is not spam.'}</p>`;
+                searchResultDiv.style.display = 'block'; // Show the search results
+
+                // Change border color based on spam status
+                searchResultDiv.style.border = `1px solid ${isSpam ? 'red' : 'green'}`;
+            } else {
+                searchResultDiv.style.display = 'none'; // Hide if input is empty
+            }
+        }
+    </script>
+</body>
+</html>
