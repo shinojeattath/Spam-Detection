@@ -1,0 +1,42 @@
+{% load static from static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Chat Interface</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Chat Interface</h2>
+        <div class="chat-box" id="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="input-group">
+            <input type="text" id="message-input" placeholder="Type your message here..." />
+            <button id="send-button">
+                ➤
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const sendButton = document.getElementById('send-button');
+        const messageInput = document.getElementById('message-input');
+        const chatBox = document.getElementById('chat-box');
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            if (message.trim() !== '') {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message;
+                messageElement.className = 'message';
+                chatBox.appendChild(messageElement);
+                messageInput.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+            }
+        });
+    </script>
+</body>
+</html>

@@ -29,20 +29,29 @@ h2 {
     font-size: 2rem; /* Increased font size for the header */
 }
 
-.input-group {
+.chat-box {
+    max-height: 300px; /* Limit chat box height */
+    overflow-y: auto; /* Enable scrolling */
+    background-color: #1a1a1a; /* Darker background for chat area */
+    padding: 1rem;
+    border-radius: 5px;
     margin-bottom: 1rem;
-    text-align: left;
+    text-align: left; /* Align messages to the left */
 }
 
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    color: #bbbbbb;
+.message {
+    background-color: #333; /* Background for each message */
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-bottom: 0.5rem; /* Space between messages */
+}
+
+.input-group {
+    display: flex;
 }
 
 input {
-    width: 100%;
+    flex: 1; /* Allow input to grow */
     padding: 0.8rem;
     border: 1px solid #555; /* Added border to input fields */
     border-radius: 5px;
@@ -56,7 +65,7 @@ input:focus {
 }
 
 button {
-    width: 100%;
+    width: 60px; /* Fixed width for button */
     padding: 0.8rem;
     background-color: #ffffff; /* Changed button color to white */
     border: none;
