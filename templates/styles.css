@@ -1,0 +1,90 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #09090B;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #ffffff;
+}
+
+.container {
+    background-color: #09090B; /* Darker grey for contrast */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: 400px; /* Increased width */
+    border: 1px solid #555; /* Grey border */
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem; /* Increased font size for the header */
+}
+
+.input-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #bbbbbb;
+}
+
+input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #555; /* Added border to input fields */
+    border-radius: 5px;
+    background-color: #09090B;
+    color: #ffffff;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid #4caf50; /* Focus border color */
+}
+
+button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #ffffff; /* Changed button color to white */
+    border: none;
+    border-radius: 5px;
+    color: #121212; /* Changed text color for better contrast */
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #f1f1f1; /* Light grey on hover */
+}
+
+.forgot-password {
+    margin-bottom: 1rem; /* Adjust this value for more or less space */
+}
+
+p {
+    margin-top: 1.5rem;
+    color: #bbbbbb;
+    font-size: 0.9rem;
+}
+
+a {
+    color: #4caf50;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
