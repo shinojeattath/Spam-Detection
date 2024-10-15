@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
+
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -36,9 +38,19 @@
         <p>Already have an account? <a href="{% url 'user_login' %}">Login</a></p>
     </div>
     <script>
-    function Login() {
-            window.location.href = "{% url 'user_login' %}";
-          }
+        window.onload = function() {
+            gsap.to(document.body, { duration: 0.5, opacity: 1 });
+        };
+
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                gsap.to(document.body, { duration: 0.5, opacity: 0, onComplete: () => {
+                    window.location = href;
+                }});
+            });
+        });
     </script>
 </body>
 </html>
