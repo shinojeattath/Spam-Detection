@@ -25,9 +25,12 @@ def user_login(request):
             login(request, user)
             request.session['username'] = username
             print(username)
+            return redirect('homepage')
         else:
+            print("invalid password")
+            print(username)
             messages.error(request, "Invalid Employee ID or Password")
-            return render(request, 'staff/login.html')
+            return render(request, 'login.html')
     return render(request, 'login.html')
 
 def user_signup(request):
@@ -36,6 +39,7 @@ def user_signup(request):
         username = request.POST['username']
         pass1 = request.POST['password']
         pass2 = request.POST['password2']
+        email = request.POST['email']
         if pass1 == pass2:
             if User.objects.filter(username=username).exists():
                 messages.error(request, "Username already exists")
@@ -43,7 +47,7 @@ def user_signup(request):
                 return render(request, 'signup.html')
                 
             else:
-                user = User.objects.create_user(username=username, password=pass1)
+                user = User.objects.create_user(username=username, password=pass1, email = email)
                 user.save()
                 print("User saved")
                 messages.success(request, "User created successfully")
