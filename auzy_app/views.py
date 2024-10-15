@@ -62,7 +62,13 @@ def user_logout(request):
     logout(request)
     return redirect('homepage')
 
-
+def user_page(request):
+    # if request.method == 'POST':
+    #     url = request.POST['url']
+    #     detect_spam(request, url)
+    #     is_spam = request.session.get('is_spam')
+    #     print(f'{url} is {is_spam}')
+    return render(request, 'user_page.html')
 
 ################################
 API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english"
@@ -74,10 +80,10 @@ def query(payload):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def detect_spam(request):
+def detect_spam(request, url):
     try:
         data = json.loads(request.body)
-        url = data.get('url')
+        
         
         if not url:
             return JsonResponse({"error": "URL is required"}, status=400)
@@ -98,8 +104,8 @@ def detect_spam(request):
                 
                 if negative_score is not None and positive_score is not None:
                     # Adjust spam detection logic
-                    is_spam = negative_score < positive_score 
-                    
+                    is_spam = negative_score > positive_score 
+                    request.session['is_spam'] = is_spam
                     return JsonResponse({
                         "url": url,
                         "is_spam": is_spam,
