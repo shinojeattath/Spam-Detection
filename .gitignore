@@ -1,1 +1,61 @@
-.sqlite
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django migrations
+**/migrations/
+
+# Local environment files
+.env
+*.env
+
+# SQLite database file
+db.sqlite3
+
+# Django static and media files
+staticfiles/
+media/
+
+# Ignore the virtual environment directory
+venv/
+.env/
+.env.bak/
+env/
+env.bak/
+
+# Python package management
+*.egg-info/
+.eggs/
+*.pyo
+
+# IDE specific files (e.g., PyCharm, VSCode)
+.vscode/
+.idea/
+
+# Log files
+*.log
+*.log.*
+
+# Ignore coverage reports
+htmlcov/
+.coverage
+*.cover
+
+# Ignore test output
+nosetests.xml
+coverage.xml
+*.cover
+
+# Ignore macOS specific files
+.DS_Store
+
+# Ignore any node_modules if using npm
+node_modules/
+
+# Ignore any build output
+build/
+dist/
