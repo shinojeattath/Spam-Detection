@@ -6,22 +6,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMS App</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #09090B;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        h2 {
+            margin: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .chat-box {
+            width: 100%;
+            max-width: 1200px;
+            height: 70%;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: #09090B;
+            color: #ffffff;
+            border-radius: 5px;
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        .chat-box ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            background-color: #333333;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .input-group {
+            width: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem; /* Added margin to create space */
+        }
+
+        input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #555;
+            border-radius: 35px;
+            background-color: #09090B;
+            color: #ffffff;
+            margin-right: 0.5rem;
+        }
+
+        input:focus {
+            outline: none;
+            border: 1px solid #4caf50;
+        }
+
+        button {
+            padding: 0.8rem;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 35px;
+            color: #121212;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .forgot-password {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #bbbbbb;
+        }
+
+        p {
+            margin-top: 1rem;
+            color: #bbbbbb;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h2>SMS App</h2>
-        <div class="chat-box">
-            <ul id="messages">
-                <li class="message">Hello! How are you?</li>
-                <li class="message">I'm good, thanks! How about you?</li>
-            </ul>
-        </div>
-        <div class="input-group">
-            <input type="text" id="message" placeholder="Type a message..." />
-            <button id="send-button">Send</button>
-        </div>
-        <p class="forgot-password">Forgot password?</p>
-        <p>&copy; 2024 SMS App</p>
+    <h2>SMS App</h2>
+    <div class="chat-box">
+        <ul id="messages">
+            <li class="message">Hello! How are you?</li>
+            <li class="message">I'm good, thanks! How about you?</li>
+        </ul>
+    </div>
+    <div class="input-group">
+        <input type="text" id="message" placeholder="Type a message..." />
+        <button id="send-button">Send</button>
     </div>
 
     <script>
