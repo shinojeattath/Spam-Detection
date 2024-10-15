@@ -70,6 +70,9 @@ def user_page(request):
     #     print(f'{url} is {is_spam}')
     return render(request, 'user_page.html')
 
+def spamChat(request):
+    return render(request, 'spam-chat.html')
+
 ################################
 API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english"
 HEADERS = {"Authorization": "Bearer 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"}

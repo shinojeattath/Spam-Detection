@@ -4,20 +4,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <title>Chat Interface</title>
+    <title>Spammer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #09090B;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 80%;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .left-section, .right-section {
+            flex: 1; /* Equally divide the space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .right-section {
+            background-color: #09090B;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid #555;
+            border-radius: 15px;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        h2 {
+            margin-bottom: 5rem;
+            margin-top: -5rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .chat-box {
+            width: 100%;
+            height: 50%;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: #09090B;
+            color: #ffffff;
+            border-radius: 5px;
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            background-color: #333333;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .input-group {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #555;
+            background-color: #09090B;
+            color: #ffffff;
+            margin-right: 20px;
+            margin-left: 20px;
+            margin-bottom: -130px;
+            border-radius: 35px;
+        }
+
+        input:focus {
+            outline: none;
+            border: 1px solid #4caf50;
+        }
+
+        button {
+            padding: 0.8rem;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 35px;
+            color: #121212;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: -130px;
+            margin-right: 20px;
+        }
+
+        button:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h2>Chat Interface</h2>
-        <div class="chat-box" id="chat-box">
-            <!-- Chat messages will appear here -->
+        <!-- Left section for the image -->
+        <div class="left-section">
+            <img src="{% static 'spam.png' %}" alt="Image">
         </div>
-        <div class="input-group">
-            <input type="text" id="message-input" placeholder="Type your message here..." />
-            <button id="send-button">
-                ➤
-            </button>
+
+        <!-- Right section for the chat interface -->
+        <div class="right-section">
+            <h2>Spammer Interface</h2>
+            <div class="chat-box" id="chat-box"></div>
+            <div class="input-group">
+                <input type="text" id="message-input" placeholder="Type your message here..." />
+                <button id="send-button">Send</button>
+            </div>
         </div>
     </div>
 
