@@ -7,4 +7,6 @@ urlpatterns = [
     path('logout/',views.user_logout,name='logout'), 
     path('detect_spam/', views.detect_spam, name='detect_spam'),
     path('user_page/', views.user_page, name='user_page'),
+    path('spam_chat/', views.spamChat, name='spam_chat'),
+
 ]
