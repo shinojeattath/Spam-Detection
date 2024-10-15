@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Interface</title>
+    <title>Spammer</title>
     <style>
         * {
             margin: 0;
@@ -16,22 +16,62 @@
         body {
             background-color: #09090B;
             color: #ffffff;
-            display: flex;
-            flex-direction: column;
             height: 100vh;
-            justify-content: flex-end;
+            display: flex;
+            justify-content: center;
             align-items: center;
         }
 
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 80%;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .left-section, .right-section {
+            flex: 1; /* Equally divide the space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .right-section {
+            background-color: #09090B;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid #555;
+            border-radius: 15px;
+            align-items: center;
+            padding: 1rem;
+        }
+
         h2 {
-            margin: 1.5rem;
+            margin-bottom: 5rem;
+            margin-top: -5rem;
             font-size: 2rem;
+            text-align: center;
         }
 
         .chat-box {
             width: 100%;
-            max-width: 1200px;
-            height: 70%;
+            height: 50%;
             overflow-y: auto;
             padding: 1rem;
             background-color: #09090B;
@@ -49,24 +89,22 @@
         }
 
         .input-group {
-            width: 80%;
+            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 1rem;
         }
 
         input {
             flex: 1;
             padding: 0.8rem;
             border: 1px solid #555;
-            border-radius: 5px;
             background-color: #09090B;
             color: #ffffff;
-            margin-bottom:20px;
-            margin-right: 0.5rem;
+            margin-right: 20px;
+            margin-left: 20px;
+            margin-bottom: -130px;
             border-radius: 35px;
-
         }
 
         input:focus {
@@ -82,7 +120,8 @@
             color: #121212;
             font-size: 1rem;
             cursor: pointer;
-            margin-bottom:20px;
+            margin-bottom: -130px;
+            margin-right: 20px;
         }
 
         button:hover {
@@ -91,13 +130,21 @@
     </style>
 </head>
 <body>
-    <h2>Chat Interface</h2>
-    <div class="chat-box" id="chat-box">
+    <div class="container">
+        <!-- Left section for the image -->
+        <div class="left-section">
+            <img src="{% static 'spam.png' %}" alt="Image">
+        </div>
 
-    </div>
-    <div class="input-group">
-        <input type="text" id="message-input" placeholder="Type your message here..." />
-        <button id="send-button">Sent</button>
+        <!-- Right section for the chat interface -->
+        <div class="right-section">
+            <h2>Spammer Interface</h2>
+            <div class="chat-box" id="chat-box"></div>
+            <div class="input-group">
+                <input type="text" id="message-input" placeholder="Type your message here..." />
+                <button id="send-button">Send</button>
+            </div>
+        </div>
     </div>
 
     <script>
