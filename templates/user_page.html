@@ -20,6 +20,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
         h1 {
             text-align: center;
@@ -45,19 +46,62 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .result {
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Spam Link Detection</h1>
-    <form method="POST" action='{% url "detect_spam" %}' >
+    <form method="POST" id="check_form">
         {% csrf_token %}
         <label for="spam_link">Enter the URL:</label>
         <input type="text" id="spam_link" name="url" placeholder="Enter a URL to check for spam" required>
         <input type="submit" value="Check for Spam">
     </form>
+    <div class="result" id="result"></div>
 </div>
+
+<script>
+    document.getElementById('check_form').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent form from refreshing the page
+
+        const url = document.getElementById('spam_link').value;
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const resultDiv = document.getElementById('result');
+
+        try {
+            const response = await fetch('{% url "detect_spam" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: {"url": url}
+            });
+
+            console.log(response)
+
+            const data = await response.json();
+
+
+            if (data.is_spam) {
+                resultDiv.textContent = 'This is a spam link!';
+                resultDiv.style.color = 'red';
+            } else {
+                resultDiv.textContent = 'This link is safe!';
+                resultDiv.style.color = 'green';
+            }
+        } catch (error) {
+            resultDiv.textContent = 'Error occurred. Please try again.';
+            resultDiv.style.color = 'orange';
+        }
+    });
+</script>
 
 </body>
 </html>

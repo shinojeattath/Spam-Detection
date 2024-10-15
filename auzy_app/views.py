@@ -80,22 +80,18 @@ def query(payload):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def detect_spam(request, url):
+def detect_spam(request):
     try:
+        # Parse JSON and extract the URL
         data = json.loads(request.body)
-        
-        
+        url = data.get('url')
+        print(data)
         if not url:
             return JsonResponse({"error": "URL is required"}, status=400)
-        
-        # Query the model
-        output = query({
-            "inputs": url,
-        })
-        
-        logger.info(f"Model output for URL {url}: {output}")
-        
-        # Process the output
+
+        # Query the model (replace with your actual query logic)
+        output = query({"inputs": url})
+        print(output)
         if output and isinstance(output, list) and len(output) > 0:
             result = output[0]
             if isinstance(result, list) and len(result) == 2:
@@ -103,9 +99,9 @@ def detect_spam(request, url):
                 positive_score = next((item['score'] for item in result if item['label'] == 'POSITIVE'), None)
                 
                 if negative_score is not None and positive_score is not None:
-                    # Adjust spam detection logic
                     is_spam = negative_score > positive_score 
                     request.session['is_spam'] = is_spam
+                    print(negative_score)
                     return JsonResponse({
                         "url": url,
                         "is_spam": is_spam,
@@ -119,7 +115,7 @@ def detect_spam(request, url):
                 return JsonResponse({"error": "Unexpected result structure"}, status=500)
         else:
             return JsonResponse({"error": "Unexpected model output"}, status=500)
-    
+
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
     except Exception as e:
