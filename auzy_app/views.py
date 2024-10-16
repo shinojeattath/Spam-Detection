@@ -4,17 +4,92 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.models import User
-from .models import User_Detail
+from .models import User_Detail, Message
 import json
 import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import logging
+from django.core import serializers
 
-# Create your views here.
 def homepage(request):
-    return HttpResponse("Homepage")
-    #return render(request, 'home.html')
+    return render(request, 'homepage.html')
+
+def chat_rec(request):
+    return render(request, 'chat-recv.html')
+
+def check_spam(msg):
+    try:
+        # Example data to send
+        data = {
+            "url": msg
+        }
+
+        # Send the data to the spam detection endpoint
+       
+
+        # Check if the request was successful
+        
+        
+        # POST request to detect_spam endpoint
+        # response = requests.post("http://127.0.0.1:8000/detect_spam/", json=data)
+
+        # Check if the request was successful
+        # if response.status_code == 200:
+        #     if response.is_spam:
+        #         return True
+        # else:
+        #     return False
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+def create_message(request):
+    if request.method == "POST":
+        content = request.POST.get('message')
+
+        response = requests.post("http://127.0.0.1:8000/detect_spam/", json={
+            'url': content
+        })
+
+        if response.status_code == 200:
+            response_data = response.json()
+            print(response_data['is_spam'])
+            if response_data['is_spam']:
+                spam = True
+            else:
+                spam = False
+
+        message = Message.objects.create(
+            content=content,
+            is_spam = spam
+        )
+        # Respond with JSON
+        return JsonResponse({
+            'message': 'Message created successfully!',
+            'id': message.id,
+            'timestamp': message.timestamp,
+        })
+
+    # Render a simple form for testing purposes
+    return render(request, 'create_message.html')
+
+def fetch_messages(request):
+    messages = Message.objects.filter(is_spam=False)
+    
+    # Serialize the queryset to JSON format
+    messages_json = serializers.serialize('json', messages)
+    
+    # Return as a JSON response; the 'safe' parameter should be True
+    return JsonResponse(messages_json, safe=False, json_dumps_params={'ensure_ascii': False})
+
+def fetch_all_messages(request):
+    messages = Message.objects.all()
+    
+    # Serialize the queryset to JSON format
+    messages_json = serializers.serialize('json', messages)
+    
+    return JsonResponse(messages_json, safe=False)
 
 def user_login(request):
     if request.method == "POST":
@@ -92,13 +167,11 @@ def detect_spam(request):
         # Parse JSON and extract the URL
         data = json.loads(request.body)
         url = data.get('url')
-        print(data)
         if not url:
             return JsonResponse({"error": "URL is required"}, status=400)
 
         # Query the model (replace with your actual query logic)
         output = query({"inputs": url})
-        print(output)
         if output and isinstance(output, list) and len(output) > 0:
             result = output[0]
             if isinstance(result, list) and len(result) == 2:
@@ -108,7 +181,6 @@ def detect_spam(request):
                 if negative_score is not None and positive_score is not None:
                     is_spam = negative_score > positive_score 
                     request.session['is_spam'] = is_spam
-                    print(negative_score)
                     return JsonResponse({
                         "url": url,
                         "is_spam": is_spam,

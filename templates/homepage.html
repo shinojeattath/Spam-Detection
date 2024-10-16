@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="{% static 'manifest.json'%}">
     <title>Homepage</title>
     <style>
         * {
@@ -41,9 +43,9 @@
         }
 
         .navbar input[type="text"] {
-            padding: 0.5rem;
+            padding: 1rem;
             border: none;
-            border-radius: 20px;
+            border-radius: 10px;
             width: 400px;
             outline: none;
             background-color: #09090B;
@@ -56,11 +58,11 @@
         }
 
         .navbar .search-button {
-            padding: 0.5rem 1rem;
+            padding: 1rem 1.5rem;
             margin-left: 10px;
             background-color: #4caf50;
             border: none;
-            border-radius: 20px;
+            border-radius: 10px;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -76,7 +78,7 @@
         }
 
         .navbar .icon-button {
-            padding: 0.5rem 0.8rem; /* Smaller padding for smaller buttons */
+            padding: 1rem 1.5rem; /* Smaller padding for smaller buttons */
             background-color: #ffffff;
             border: none;
             border-radius: 25px;
@@ -148,6 +150,9 @@
         a:hover {
             text-decoration: underline;
         }
+        .icon-button {
+            border-radius: 5px !important;
+        }
 
         /* Search Result Box Styles */
         .search-result {
@@ -171,41 +176,89 @@
             <button class="search-button" onclick="performSearch()">Search</button>
         </div>
         <div class="icon-container">
-            <button class="icon-button" onclick="window.open('user.html', '_blank')">User</button>
-            <button class="icon-button" onclick="window.open('chat.html', '_blank')">Chat</button>
-            <button class="icon-button" onclick="window.open('result.html', '_blank')">Result</button>
+            <button class="icon-button" onclick="window.open('{% url 'chat_rec' %}')">User</button>
+            <button class="icon-button" onclick="window.open('{% url 'spam_chat' %}', '_blank')">Adversary</button>
         </div>
     </header>
 
     <main class="container">
-        <h2>Welcome to the Spammer Web App</h2>
-        <p>The Spam Detection Web Application is a simple yet effective tool designed to automatically receive and analyze incoming messages for spam content. It aims to provide a quick and efficient solution for identifying unwanted messages, making it useful for personal and professional communication channels.</p>
+        <h2>Welcome to the network Spam/Fraud Detector </h2>
+        <p>The Fraud Detection Web Application is a simple yet effective tool designed to automatically receive and analyze incoming messages for spam or fraud content. It aims to provide a quick and efficient solution for identifying unwanted messages, making it useful for personal and professional communication channels.</p>
         
         <!-- Search Result Box -->
         <div class="search-result" id="searchResult" style="display: none;">
             <!-- Search results will be displayed here -->
         </div>
+        <table id="messageTable" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #555; padding: 10px;">ID</th>
+                    <th style="border: 1px solid #555; padding: 10px;">Content</th>
+                    <th style="border: 1px solid #555; padding: 10px;">Timestamp</th>
+                    <th style="border: 1px solid #555; padding: 10px;">Spam Status</th>
+                </tr>
+            </thead>
+            <tbody id="messageTableBody"></tbody>
+        </table>
     </main>
 
     <script>
-        function performSearch() {
-            const searchInput = document.getElementById('searchInput').value;
-            const searchResultDiv = document.getElementById('searchResult');
-
-            // Example spam detection logic (replace with actual logic)
-            const spamDomains = ['spam.com', 'fake.com', 'test.com']; // Add spam domains here
-            const isSpam = spamDomains.includes(searchInput.trim());
-
-            if (searchInput.trim() !== '') {
-                searchResultDiv.innerHTML = `<h3>Result for "${searchInput}":</h3><p>${isSpam ? 'This domain is a spam!' : 'This domain is not spam.'}</p>`;
-                searchResultDiv.style.display = 'block'; // Show the search results
-
-                // Change border color based on spam status
-                searchResultDiv.style.border = `1px solid ${isSpam ? 'red' : 'green'}`;
-            } else {
-                searchResultDiv.style.display = 'none'; // Hide if input is empty
-            }
+        function fetchMessages() {
+            fetch('/fetch_all_messages/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Log to ensure data structure is correct
+                    const messages = JSON.parse(data); // Assuming 'data' is the array of message objects
+        
+                    // Reverse the messages array to show the newest at the top
+                    messages.reverse();
+        
+                    const tableBody = document.getElementById('messageTableBody');
+                    tableBody.innerHTML = ''; // Clear previous entries
+        
+                    messages.forEach(msg => {
+                        const row = document.createElement('tr');
+        
+                        // Extract values from each message
+                        const { pk, fields } = msg;
+        
+                        const idCell = document.createElement('td');
+                        idCell.textContent = pk;
+                        idCell.style.border = '1px solid #555';
+                        idCell.style.padding = '10px';
+        
+                        const contentCell = document.createElement('td');
+                        contentCell.textContent = fields.content;
+                        contentCell.style.border = '1px solid #555';
+                        contentCell.style.padding = '10px';
+        
+                        const timestampCell = document.createElement('td');
+                        timestampCell.textContent = new Date(fields.timestamp).toLocaleString();
+                        timestampCell.style.border = '1px solid #555';
+                        timestampCell.style.padding = '10px';
+        
+                        const statusCell = document.createElement('td');
+                        statusCell.textContent = fields.is_spam ? 'Spam' : 'Not Spam';
+                        statusCell.style.border = '1px solid #555';
+                        statusCell.style.padding = '10px';
+                        statusCell.style.color = fields.is_spam ? 'red' : 'green';
+        
+                        // Append cells to the row
+                        row.appendChild(idCell);
+                        row.appendChild(contentCell);
+                        row.appendChild(timestampCell);
+                        row.appendChild(statusCell);
+        
+                        // Append row to the table body
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching messages:', error));
         }
+        
+        // Fetch messages when the page loads
+        window.onload = fetchMessages;
+        setInterval(fetchMessages, 2000)
     </script>
 </body>
 </html>

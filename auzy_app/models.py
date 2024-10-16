@@ -7,3 +7,14 @@ class User_Detail(models.Model):
     name = models.CharField(max_length=100)
     def __str__(self):
         return self.username
+    
+
+class Message(models.Model):
+    sender = models.CharField(max_length=100, blank=True, null=True)
+    receiver = models.CharField(max_length=100, blank=True, null=True)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_spam = models.BooleanField(default=False, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.sender} to {self.receiver}: {self.content[:30]}"

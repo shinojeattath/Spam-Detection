@@ -1,11 +1,12 @@
 {% load static from static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spammer</title>
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="manifest" href="{% static 'manifest.json'%}">
+        <title>Spammer</title>
+        <style>
         * {
             margin: 0;
             padding: 0;
@@ -76,7 +77,7 @@
             padding: 1rem;
             background-color: #09090B;
             color: #ffffff;
-            border-radius: 5px;
+            border-radius: 10px;
             text-align: left;
             margin-bottom: 1rem;
         }
@@ -97,14 +98,14 @@
 
         input {
             flex: 1;
-            padding: 0.8rem;
+            padding: 1rem;
             border: 1px solid #555;
             background-color: #09090B;
             color: #ffffff;
             margin-right: 20px;
             margin-left: 20px;
             margin-bottom: -130px;
-            border-radius: 35px;
+            border-radius: 10px;
         }
 
         input:focus {
@@ -113,10 +114,10 @@
         }
 
         button {
-            padding: 0.8rem;
+            padding: .8rem;
             background-color: #ffffff;
             border: none;
-            border-radius: 35px;
+            border-radius: 10px;
             color: #121212;
             font-size: 1rem;
             cursor: pointer;
@@ -128,41 +129,58 @@
             background-color: #f1f1f1;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Left section for the image -->
-        <div class="left-section">
-            <img src="{% static 'spam.png' %}" alt="Image">
-        </div>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Left section for the image -->
+            <div class="left-section">
+                <img src="{% static 'spam.png' %}" alt="Image">
+            </div>
 
-        <!-- Right section for the chat interface -->
-        <div class="right-section">
-            <h2>Spammer Interface</h2>
-            <div class="chat-box" id="chat-box"></div>
-            <div class="input-group">
-                <input type="text" id="message-input" placeholder="Type your message here..." />
-                <button id="send-button">Send</button>
+            <!-- Right section for the chat interface -->
+            <div class="right-section">
+                <h2>Spammer Interface</h2>
+                <div class="chat-box" id="chat-box"><ul
+                        style="list-style: none;" id="messages"></ul></div>
+                <div class="input-group">
+                    <form action="." id="messageForm">
+                        {% csrf_token %}
+                        <input type="text" id="message-input"
+                            placeholder="Type your message here..."
+                            name="message" />
+                        <button id="send-button" type="submit">Send</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        const sendButton = document.getElementById('send-button');
-        const messageInput = document.getElementById('message-input');
+        <script>
+        const form = document.getElementById('messageForm');
         const chatBox = document.getElementById('chat-box');
+        const succ = document.getElementById('messages')
 
-        sendButton.addEventListener('click', () => {
-            const message = messageInput.value;
-            if (message.trim() !== '') {
-                const messageElement = document.createElement('div');
-                messageElement.textContent = message;
-                messageElement.className = 'message';
-                chatBox.appendChild(messageElement);
-                messageInput.value = '';
-                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
-            }
+        document.getElementById('messageForm').addEventListener('submit', function (e) {
+            
+            
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('/create_message/', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Message ID:', data.id);
+                fetchMessages();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
+
+        
     </script>
-</body>
+    </body>
 </html>

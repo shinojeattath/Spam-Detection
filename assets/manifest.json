@@ -1,0 +1,17 @@
+{
+    "lang": "en-us",
+    "name": "Spam/Fraud Detector",
+    "short_name": "Fraud Detector",
+    "description": "A basic fraud detecting application.",
+    "start_url": "/",
+    "background_color": "#2f3d58",
+    "theme_color": "#2f3d58",
+    "orientation": "any",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/static/spam.png",
+            "sizes": "512x512"
+        }
+    ]
+}

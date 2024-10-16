@@ -1,141 +1,146 @@
-{% load static from static %}
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="{% static 'manifest.json'%}">
     <title>SMS App</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
 
-        body {
-            background-color: #09090B;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            justify-content: flex-end;
-            align-items: center;
-        }
+      body {
+        background-color: #09090b;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-        h2 {
-            margin: 1.5rem;
-            font-size: 2rem;
-        }
+      h2 {
+        margin: 1.5rem;
+        font-size: 2rem;
+      }
 
-        .chat-box {
-            width: 100%;
-            max-width: 1200px;
-            height: 70%;
-            overflow-y: auto;
-            padding: 1rem;
-            background-color: #09090B;
-            color: #ffffff;
-            border-radius: 5px;
-            text-align: left;
-            margin-bottom: 1rem;
-        }
+      .chat-box {
+        width: 100%;
+        max-width: 1200px;
+        overflow-y: auto;
+        padding: 1rem;
+        background-color: #09090b;
+        color: #ffffff;
+        border-radius: 5px;
+        text-align: left;
+        margin-bottom: 1rem;
+      }
 
-        .chat-box ul {
-            list-style-type: none;
-            padding: 0;
-        }
+      .chat-box ul {
+        list-style-type: none;
+        padding: 0;
+      }
 
-        .message {
-            margin-bottom: 1rem;
-            background-color: #333333;
-            padding: 0.5rem;
-            border-radius: 5px;
-        }
+      .message {
+        margin-bottom: 1rem;
+        background-color: #333333;
+        padding: 0.5rem;
+        border-radius: 5px;
+      }
 
-        .input-group {
-            width: 80%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 3rem; /* Added margin to create space */
-        }
+      .input-group {
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 3rem;
+      }
 
-        input {
-            flex: 1;
-            padding: 0.8rem;
-            border: 1px solid #555;
-            border-radius: 35px;
-            background-color: #09090B;
-            color: #ffffff;
-            margin-right: 0.5rem;
-        }
+      input {
+        flex: 1;
+        padding: 0.8rem;
+        border: 1px solid #555;
+        border-radius: 35px;
+        background-color: #09090b;
+        color: #ffffff;
+        margin-right: 0.5rem;
+      }
 
-        input:focus {
-            outline: none;
-            border: 1px solid #4caf50;
-        }
+      input:focus {
+        outline: none;
+        border: 1px solid #4caf50;
+      }
 
-        button {
-            padding: 0.8rem;
-            background-color: #ffffff;
-            border: none;
-            border-radius: 35px;
-            color: #121212;
-            font-size: 1rem;
-            cursor: pointer;
-        }
+      button {
+        padding: 0.8rem;
+        background-color: #ffffff;
+        max-width: 100px;
+        border: none;
+        border-radius: 35px;
+        color: #121212;
+        font-size: 1rem;
+        cursor: pointer;
+      }
 
-        button:hover {
-            background-color: #f1f1f1;
-        }
+      button:hover {
+        background-color: #f1f1f1;
+      }
 
-        .forgot-password {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #bbbbbb;
-        }
+      .forgot-password {
+        margin-top: 2rem;
+        font-size: 0.9rem;
+        color: #bbbbbb;
+      }
 
-        p {
-            margin-top: 1rem;
-            color: #bbbbbb;
-            font-size: 0.9rem;
-        }
+      p {
+        margin-top: 1rem;
+        color: #bbbbbb;
+        font-size: 0.9rem;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h2>SMS App</h2>
     <div class="chat-box">
-        <ul id="messages">
-            <li class="message">Hello! How are you?</li>
-            <li class="message">I'm good, thanks! How about you?</li>
-        </ul>
-    </div>
-    <div class="input-group">
-        <input type="text" id="message" placeholder="Type a message..." />
-        <button id="send-button">Send</button>
+      <ul id="messages"></ul>
     </div>
 
     <script>
-        document.getElementById('send-button').addEventListener('click', function() {
-            const messageInput = document.getElementById('message');
-            const messageText = messageInput.value;
+      fetchMessages();
+      function fetchMessages() {
+        fetch("/fetch_messages/")
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Fetched data:", data);
 
-            if (messageText.trim()) {
-                const messagesList = document.getElementById('messages');
-                
-                const newMessage = document.createElement('li');
-                newMessage.className = 'message';
-                newMessage.textContent = messageText;
+            const messagesList = document.getElementById("messages");
+            messagesList.innerHTML = "";
 
-                messagesList.appendChild(newMessage);
-                messageInput.value = '';
+            const parsedData = JSON.parse(data);
 
-                // Auto-scroll to the bottom
-                messagesList.scrollTop = messagesList.scrollHeight;
-            }
-        });
+            parsedData.forEach((item) => {
+              const { content } = item.fields; 
+
+              const li = document.createElement("li");
+              li.className = "message";
+              li.textContent = content;
+              messagesList.appendChild(li);
+            });
+
+            const chatBox = document.querySelector(".chat-box");
+            chatBox.scrollTop = chatBox.scrollHeight;
+          })
+          .catch((error) => {
+            console.error("Error fetching messages:", error);
+          });
+      }
+
+      // Fetch messages every 5 seconds
+      setInterval(fetchMessages, 5000);
     </script>
-</body>
+  </body>
 </html>
